@@ -9,5 +9,4 @@ public class TomatoMallApplication {
     public static void main(String[] args) {
         SpringApplication.run(TomatoMallApplication.class, args);
     }
-
 }
