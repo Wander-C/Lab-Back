@@ -72,10 +72,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Boolean updateAccountInfo(AccountVO accountVO) {
-        Account account = securityUtil.getCurrentAccount();
-        if(accountVO.getUsername()!=null){
-            account.setUsername(accountVO.getUsername());
-        }
+        Account account=accountRepository.findByUsername(accountVO.getUsername());
         if(accountVO.getPassword()!=null){
             String rawPassword = accountVO.getPassword();
             String encodedPassword = passwordEncoder.encode(rawPassword);
