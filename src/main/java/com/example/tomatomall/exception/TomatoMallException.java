@@ -16,4 +16,5 @@ public class TomatoMallException extends RuntimeException {
     public static TomatoMallException usernameNotExist(){
         return new TomatoMallException("用户名不存在");
     }
+    public static TomatoMallException fileUploadFail() { return new TomatoMallException("文件上传失败");}
 }
