@@ -1,5 +1,7 @@
 package com.example.tomatomall.vo;
 
+import com.example.tomatomall.po.Specification;
+import com.example.tomatomall.repository.SpecificationRepository;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

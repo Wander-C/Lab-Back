@@ -14,24 +14,17 @@ public class StockpileVO {
     private Integer amount;
     private Integer frozen;
 
-    /**
-     * 计算可用库存（可售数量）
-     * @return 可用库存量
-     */
+
     public Integer getAvailable() {
         return amount - frozen;
     }
 
-    /**
-     * 转换为PO对象
-     * @return Stockpile
-     */
     public Stockpile toPO() {
-        Stockpile po = new Stockpile();
-        po.setId(this.id);
-        po.setProductId(this.productId);
-        po.setAmount(this.amount);
-        po.setFrozen(this.frozen);
-        return po;
+        Stockpile stockpile = new Stockpile();
+        stockpile.setId(this.id);
+        stockpile.setProductId(this.productId);
+        stockpile.setAmount(this.amount);
+        stockpile.setFrozen(this.frozen);
+        return stockpile;
     }
 }

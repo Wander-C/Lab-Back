@@ -6,17 +6,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 public class ProductVO {
     private Integer id;
     private String title;
-    private Integer price;
+    private BigDecimal price;
     private Double rate;
     private String description;
     private String cover;
     private String detail;
+    // 注意可以填写规格信息
+    private List<SpecificationVO> specifications;
 
     public Product toPO(){
         Product product = new Product();

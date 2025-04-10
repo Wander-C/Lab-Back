@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -21,9 +22,9 @@ public class Product {
 
     @Column(name = "title",nullable = false)
     private String title;
-
-    @Column(name = "price")
-    private Integer price;
+    // demical(10,2)
+    @Column(name = "price", precision = 10, scale = 2, nullable = false)
+    private BigDecimal price;
 
     @Column(name = "rate")
     private Double rate;
