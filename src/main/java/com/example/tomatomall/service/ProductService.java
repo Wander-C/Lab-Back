@@ -13,7 +13,7 @@ public interface ProductService {
     // 更新商品信息 
     Boolean updateProductInfo(ProductVO productVO);
     // 增加商品
-    Boolean create(ProductVO productVO);
+    ProductVO create(ProductVO productVO);
     // 删除商品
     Boolean delete(Integer id);
     // 调整指定商品的库存

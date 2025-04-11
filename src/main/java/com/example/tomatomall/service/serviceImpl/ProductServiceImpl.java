@@ -111,7 +111,7 @@ public class ProductServiceImpl implements ProductService {
             List<Specification> newSpecs = productVO.getSpecifications().stream()
                     .map(specVO -> {
                         Specification spec = specVO.toPO();
-                        spec.setId(null); // 设置为null以便新建？？
+                        //spec.setId(null); // 设置为null以便新建？？
                         spec.setProductId(productVO.getId());
                         return spec;
                     })
@@ -125,7 +125,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Boolean create(ProductVO productVO){
+    public ProductVO create(ProductVO productVO){
         if (productRepository.findByName(productVO.getTitle()) != null) {
             throw TomatoMallException.nameAlreadyExists();
         }
@@ -140,7 +140,7 @@ public class ProductServiceImpl implements ProductService {
             List<Specification> specs = productVO.getSpecifications().stream()
                     .map(specVO -> {
                         Specification spec = specVO.toPO();
-                        spec.setId(null); // 设置为null以便新建？？
+                        //spec.setId(null); // 设置为null以便新建？？
                         spec.setProductId(productId);
                         return spec;
                     })
@@ -157,7 +157,7 @@ public class ProductServiceImpl implements ProductService {
         stockpileRepository.save(stockpile);
         
         // logger.info("新商品[{}]已创建", productVO.getTitle());
-        return true;
+        return product.toVO();
     }
 
     @Override

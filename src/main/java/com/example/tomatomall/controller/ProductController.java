@@ -36,9 +36,10 @@ public class ProductController {
      * 创建新商品
      */
     @PostMapping
-    public Response<String> createProduct(@RequestBody ProductVO productVO) {
-        if (productService.create(productVO)) {
-            return Response.buildSuccess("商品创建成功");
+    public Response<ProductVO> createProduct(@RequestBody ProductVO productVO) {
+        ProductVO product = productService.create(productVO);
+        if (product!=null) {
+            return Response.buildSuccess(product);
         }
         return Response.buildFailure("商品创建失败", "400");
     }
@@ -46,13 +47,12 @@ public class ProductController {
     /**
      * 更新商品信息
      */
-    @PutMapping("/{id}")
-    public Response<String> updateProduct(@PathVariable Integer id, @RequestBody ProductVO productVO) {
-        productVO.setId(id);
+    @PutMapping("")
+    public Response<String> updateProduct(@RequestBody ProductVO productVO) {
         if (productService.updateProductInfo(productVO)) {
-            return Response.buildSuccess("商品更新成功");
+            return Response.buildSuccess("更新成功");
         }
-        return Response.buildFailure("商品更新失败", "400");
+        return Response.buildFailure("商品不存在", "400");
     }
     
     /**
@@ -61,15 +61,15 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public Response<String> deleteProduct(@PathVariable Integer id) {
         if (productService.delete(id)) {
-            return Response.buildSuccess("商品删除成功");
+            return Response.buildSuccess("删除成功");
         }
-        return Response.buildFailure("商品删除失败", "400");
+        return Response.buildFailure("商品不存在", "400");
     }
     
     /**
      * 获取商品库存
      */
-    @GetMapping("/{id}/stock")
+    @GetMapping("/stockpile/{id}")
     public Response<StockpileVO> getProductStock(@PathVariable Integer id) {
         return Response.buildSuccess(productService.getProductStock(id));
     }
@@ -77,11 +77,11 @@ public class ProductController {
     /**
      * 调整商品库存
      */
-    @PutMapping("/{id}/stock")
-    public Response<String> alterProductStock(@PathVariable Integer id, @RequestParam Integer number) {
-        if (productService.alterProductStock(id, number)) {
-            return Response.buildSuccess("库存调整成功");
+    @PatchMapping("/stockpile/{id}")
+    public Response<String> alterProductStock(@PathVariable Integer id, @RequestBody StockpileVO stockpileVO) {
+        if (productService.alterProductStock(id, stockpileVO.getAmount())) {
+            return Response.buildSuccess("调整库存成功");
         }
-        return Response.buildFailure("库存调整失败", "400");
+        return Response.buildFailure("商品不存在", "400");
     }
 }
