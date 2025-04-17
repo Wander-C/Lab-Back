@@ -205,8 +205,8 @@ public class ProductServiceImpl implements ProductService {
         }
         
         // 调整库存数量
-        int currentAmount = stockpile.getAmount();
-        int newAmount = currentAmount + number;
+        //int currentAmount = stockpile.getAmount();
+        int newAmount = number;
         
         // 库存不能为负数
         if (newAmount < 0) {
