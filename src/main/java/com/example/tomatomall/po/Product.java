@@ -1,7 +1,5 @@
 package com.example.tomatomall.po;
 
-import com.example.tomatomall.enums.Role;
-import com.example.tomatomall.vo.AccountVO;
 import com.example.tomatomall.vo.ProductVO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
