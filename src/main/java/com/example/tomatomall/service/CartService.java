@@ -31,5 +31,7 @@ public interface CartService {
      * @return 购物车信息，包含商品列表、总数量和总金额
      */
     List<CartVO> getCartItems();
+
+    CartVO getCartItem(Integer cartItemId);
     
 } 

@@ -20,4 +20,12 @@ public interface ProductService {
     Boolean alterProductStock(Integer id, Integer number);
     // 查询指定商品的库存 1
     StockpileVO getProductStock(Integer id);
+
+    // 冻结指定商品的库存
+    void frozenProduct(Integer id, Integer number);
+    // 解冻指定商品的库存
+    void unfrozenProduct(Integer id, Integer number);
+    // 卖出指定商品的库存
+    void sellProduct(Integer id, Integer number);
 }
+

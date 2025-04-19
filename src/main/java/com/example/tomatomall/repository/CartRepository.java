@@ -1,6 +1,7 @@
 package com.example.tomatomall.repository;
 
 import com.example.tomatomall.po.Cart;
+import com.example.tomatomall.vo.CartVO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -33,4 +34,6 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
      * 根据购物车项ID列表和用户ID查找购物车项列表
      */
     List<Cart> findByCartItemIdInAndUser_id(List<Integer> cartItemIds, Integer userId);
-} 
+
+    Cart findByCartItemId(Integer cartItemId);
+}

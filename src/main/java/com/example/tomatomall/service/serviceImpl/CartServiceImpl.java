@@ -159,5 +159,11 @@ public class CartServiceImpl implements CartService {
 
         return result;
     }
-    
+
+    @Override
+    public CartVO getCartItem(Integer cartItemId) {
+        return cartRepository.findByCartItemId(cartItemId).toCartVO();
+    }
+
+
 } 

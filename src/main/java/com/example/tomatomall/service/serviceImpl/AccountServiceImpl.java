@@ -99,4 +99,9 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(account);
         return true;
     }
+
+    @Override
+    public AccountVO getAccountInfo(Integer accountId) {
+        return accountRepository.findById(accountId).map(Account::toVO).orElse(null);
+    }
 }

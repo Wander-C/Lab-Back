@@ -3,8 +3,11 @@ package com.example.tomatomall.controller;
 import com.example.tomatomall.exception.TomatoMallException;
 import com.example.tomatomall.po.Account;
 import com.example.tomatomall.service.CartService;
+import com.example.tomatomall.service.OrderService;
 import com.example.tomatomall.util.SecurityUtil;
 import com.example.tomatomall.vo.CartVO;
+import com.example.tomatomall.vo.CheckoutRequest;
+import com.example.tomatomall.vo.OrderVO;
 import com.example.tomatomall.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,10 @@ public class CartController {
 
     @Autowired
     private SecurityUtil securityUtil;
+
+    @Autowired
+    private OrderService orderService;
+
 
     /**
      * 添加商品到购物车
@@ -148,5 +155,10 @@ public class CartController {
         } catch (Exception e) {
             throw new TomatoMallException(e.getMessage());
         }
+    }
+
+    @PostMapping("/checkout")
+    public Response<OrderVO> checkout(@RequestBody CheckoutRequest checkoutRequest) {
+        return Response.buildSuccess(orderService.createOrder(checkoutRequest.getCartItemIds(), checkoutRequest.getShipping_address(), checkoutRequest.getPayment_method()));
     }
 } 

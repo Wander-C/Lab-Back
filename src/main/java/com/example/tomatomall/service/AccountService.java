@@ -12,4 +12,6 @@ public interface AccountService {
     AccountVO getAccountInfo(String username);
 
     Boolean updateAccountInfo(AccountVO accountVO);
+
+    AccountVO getAccountInfo(Integer accountId);
 }

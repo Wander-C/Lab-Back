@@ -228,4 +228,37 @@ public class ProductServiceImpl implements ProductService {
         }
         return stockpile.toVO();
     }
+
+    @Override
+    public void frozenProduct(Integer id, Integer number) {
+        Stockpile stockpile = stockpileRepository.findByProductId(id);
+        if (stockpile.getAmount() < number) {
+            throw TomatoMallException.stockNotEnough();
+        }
+        stockpile.setFrozen(stockpile.getFrozen() + number);
+        stockpile.setAmount(stockpile.getAmount() - number);
+        stockpileRepository.save(stockpile);
+    }
+
+    @Override
+    public void unfrozenProduct(Integer id, Integer number) {
+        Stockpile stockpile = stockpileRepository.findByProductId(id);
+        if (stockpile.getFrozen() < number) {
+            throw TomatoMallException.stockNotEnough();
+        }
+        stockpile.setFrozen(stockpile.getFrozen() - number);
+        stockpile.setAmount(stockpile.getAmount() + number);
+        stockpileRepository.save(stockpile);
+    }
+
+    @Override
+    public void sellProduct(Integer id, Integer number) {
+        Stockpile stockpile = stockpileRepository.findByProductId(id);
+        if (stockpile.getFrozen() < number) {
+            throw TomatoMallException.stockNotEnough();
+        }
+        stockpile.setFrozen(stockpile.getFrozen() - number);
+    }
+
+
 }
