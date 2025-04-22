@@ -3,6 +3,7 @@ package com.example.tomatomall.controller;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.example.tomatomall.enums.OrderStatus;
+import com.example.tomatomall.po.Cart;
 import com.example.tomatomall.po.CartOrdersRelation;
 import com.example.tomatomall.repository.CartOrderRelationRepository;
 import com.example.tomatomall.service.CartService;
@@ -44,13 +45,15 @@ public class OrderController {
     @Value("${alipay.alipayPublicKey}")
     private String alipayPublicKey;
 
-    @PostMapping("/{oderId}/pay")
+    @PostMapping("/{orderId}/pay")
     public Response<PayVO> payOrder(@PathVariable Integer orderId) {
+        System.out.println("==========支付==========");
         return Response.buildSuccess(orderService.payOrder(orderId));
     }
 
     @PostMapping("/notify")
     public void handleAlipayNotify(HttpServletRequest request, HttpServletResponse response) throws IOException, AlipayApiException {
+        System.out.println("==========支付回调==========");
         // 1. 解析支付宝回调参数（通常是 application/x-www-form-urlencoded）
         Map<String, String> params = request.getParameterMap().entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue()[0]));
@@ -78,6 +81,7 @@ public class OrderController {
 
             for (CartOrdersRelation relation : cartOrderRelationRepository.findByOrderId(orderId)) {
                 CartVO cartVO = cartService.getCartItem(relation.getCartItemId());
+                productService.unfrozenProduct(cartVO.getProductId(), cartVO.getQuantity());
                 productService.sellProduct(cartVO.getProductId(), cartVO.getQuantity());
             }
         }

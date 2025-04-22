@@ -29,8 +29,8 @@ public class CartVO {
     public Cart toCart(){
         Cart cart = new Cart();
         cart.setCartItemId(this.cartItemId);
-        cart.setUser_id(this.userId);
-        cart.setProduct_id(this.productId);
+        cart.setUserId(this.userId);
+        cart.setProductId(this.productId);
         cart.setQuantity(this.quantity);
         return cart;
     }

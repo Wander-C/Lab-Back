@@ -53,7 +53,7 @@ public class CartServiceImpl implements CartService {
         }
 
         // 3. 检查购物车中是否已有该商品
-        Optional<Cart> existingCartItem = cartRepository.findByUser_idAndProduct_id(userId, productId);
+        Optional<Cart> existingCartItem = cartRepository.findByUserIdAndProductId(userId, productId);
         Cart cart;
 
         if (existingCartItem.isPresent()) {
@@ -71,8 +71,8 @@ public class CartServiceImpl implements CartService {
             // 如果没有，则创建新的购物车项
             cart = new Cart();
             // 会自动生成cartItemId，详见Cart.java
-            cart.setUser_id(userId);
-            cart.setProduct_id(productId);
+            cart.setUserId(userId);
+            cart.setProductId(productId);
             cart.setQuantity(quantity);
         }
 
@@ -97,7 +97,7 @@ public class CartServiceImpl implements CartService {
         Integer userId = securityUtil.getCurrentAccount().getId();
         
         // 1. 检查购物车项是否存在且属于当前用户
-        Optional<Cart> cartOptional = cartRepository.findByCartItemIdAndUser_id(cartItemId, userId);
+        Optional<Cart> cartOptional = cartRepository.findByCartItemIdAndUserId(cartItemId, userId);
         if (!cartOptional.isPresent()) {
             throw TomatoMallException.cartItemNotExists();
         }
@@ -113,14 +113,14 @@ public class CartServiceImpl implements CartService {
         Integer userId = securityUtil.getCurrentAccount().getId();
         
         // 1. 检查购物车项是否存在且属于当前用户
-        Optional<Cart> cartOptional = cartRepository.findByCartItemIdAndUser_id(cartItemId, userId);
+        Optional<Cart> cartOptional = cartRepository.findByCartItemIdAndUserId(cartItemId, userId);
         if (!cartOptional.isPresent()) {
             throw TomatoMallException.cartItemNotExists();
         }
         Cart cart = cartOptional.get();
 
         // 2. 检查库存是否足够
-        Stockpile stockpile = stockpileRepository.findByProductId(cart.getProduct_id());
+        Stockpile stockpile = stockpileRepository.findByProductId(cart.getProductId());
         if (stockpile == null || stockpile.getAmount() < quantity) {
             throw TomatoMallException.stockNotEnough();
         }
@@ -136,12 +136,12 @@ public class CartServiceImpl implements CartService {
         Integer userId = securityUtil.getCurrentAccount().getId();
         
         // 1. 获取用户的所有购物车项
-        List<Cart> cartItems = cartRepository.findByUser_id(userId);
+        List<Cart> cartItems = cartRepository.findByUserId(userId);
         List<CartVO> result = new ArrayList<>();
 
         // 2. 遍历购物车项，获取商品信息
         for (Cart cart : cartItems) {
-            Optional<Product> productOptional = productRepository.findById(cart.getProduct_id());
+            Optional<Product> productOptional = productRepository.findById(cart.getProductId());
             if (productOptional.isPresent()) {
                 Product product = productOptional.get();
                 

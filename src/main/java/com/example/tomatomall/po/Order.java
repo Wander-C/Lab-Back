@@ -12,15 +12,16 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
+@Table(name = "orders")
 @NoArgsConstructor
 @Entity
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "orderId")
-    private Integer id;
+    @Column(name = "order_id")
+    private Integer orderId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId",nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "user_id",nullable = false)//, insertable = false, updatable = false)
     private Account account;
     @Column(name = "total_amount",nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;
@@ -33,7 +34,7 @@ public class Order {
 
     public OrderVO toVO(){
         OrderVO orderVO = new OrderVO();
-        orderVO.setId(this.id);
+        orderVO.setOrderId(this.orderId);
         orderVO.setAccountVO(this.account.toVO());
         orderVO.setTotalAmount(this.totalAmount);
         orderVO.setStatus(this.status);

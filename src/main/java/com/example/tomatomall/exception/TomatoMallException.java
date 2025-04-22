@@ -22,4 +22,5 @@ public class TomatoMallException extends RuntimeException {
     public static TomatoMallException nameAlreadyExists() { return new TomatoMallException("商品名称已存在");}
     public static TomatoMallException stockNotEnough() { return new TomatoMallException("商品库存不足");}
     public static TomatoMallException cartItemNotExists() { return new TomatoMallException("购物车商品不存在");}
+    public static TomatoMallException orderNotExists() { return new TomatoMallException("订单不存在");}
 }

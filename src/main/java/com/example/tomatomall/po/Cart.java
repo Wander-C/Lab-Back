@@ -20,14 +20,14 @@ public class Cart {
     @Id
     // 自动生成一个cartId
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cartItemId")
+    @Column(name = "cart_item_id")
     private Integer cartItemId;
 
     @Column(name = "user_id", nullable = false)
-    private Integer user_id;
+    private Integer userId;
 
     @Column(name = "product_id", nullable = false)
-    private Integer product_id;
+    private Integer productId;
 
     @Column(name = "quantity", nullable = false, columnDefinition = "INT DEFAULT 1")
     private Integer quantity;
@@ -35,8 +35,8 @@ public class Cart {
     public CartVO toCartVO(){
         CartVO cartVO = new CartVO();
         cartVO.setCartItemId(this.cartItemId);
-        cartVO.setUserId(this.user_id);
-        cartVO.setProductId(this.product_id);
+        cartVO.setUserId(this.userId);
+        cartVO.setProductId(this.productId);
         cartVO.setQuantity(this.quantity);
 
         return cartVO;

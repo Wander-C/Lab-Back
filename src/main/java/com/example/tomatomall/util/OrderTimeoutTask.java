@@ -41,7 +41,7 @@ public class OrderTimeoutTask {
 
         for (Order order : expiredOrders) {
 
-            for (CartOrdersRelation relation : cartOrderRelationRepository.findByOrderId(order.getId())) {
+            for (CartOrdersRelation relation : cartOrderRelationRepository.findByOrderId(order.getOrderId())) {
                 CartVO cart = cartService.getCartItem(relation.getCartItemId());
                 productService.unfrozenProduct(cart.getProductId(), cart.getQuantity());
             }

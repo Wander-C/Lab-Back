@@ -8,6 +8,7 @@ import javax.persistence.*;
 
 @Getter
 @Setter
+@Table(name = "shipping_address")
 @NoArgsConstructor
 @Entity
 public class shippingAddress {
@@ -15,8 +16,9 @@ public class shippingAddress {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId",nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "user_id",nullable = false, insertable = false, updatable = false)
     private Account account;
     @Column(name = "name")
     private String name;

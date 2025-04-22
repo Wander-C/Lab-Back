@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 @Setter
 @NoArgsConstructor
 public class OrderVO {
-    private Integer id;
+    private Integer orderId;
 
     private AccountVO accountVO;
 
@@ -27,7 +27,7 @@ public class OrderVO {
 
     public Order toPO(){
         Order order = new Order();
-        order.setId(this.id);
+        order.setOrderId(this.orderId);
         order.setAccount(this.accountVO.toPO());
         order.setTotalAmount(this.totalAmount);
         order.setStatus(this.status);

@@ -19,6 +19,7 @@ import com.example.tomatomall.vo.CartVO;
 import com.example.tomatomall.vo.OrderVO;
 import com.example.tomatomall.vo.PayVO;
 import com.example.tomatomall.vo.shippingAddressVO;
+import org.hibernate.resource.beans.internal.BeansMessageLogger_$logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -74,20 +75,27 @@ public class OrderServiceImpl implements OrderService {
             if (cartVO.getQuantity()>productService.getProductStock(cartVO.getProductId()).getAvailable()) {
                 throw TomatoMallException.stockNotEnough();
             }
-            productService.frozenProduct(cartVO.getProductId(), cartVO.getQuantity());
-            totalAmount.add(productService.getProduct(cartVO.getProductId()).getPrice());
+            //productService.frozenProduct(cartVO.getProductId(), cartVO.getQuantity());
+            //totalAmount.add(productService.getProduct(cartVO.getProductId()).getPrice());
+            totalAmount = totalAmount.add(productService.getProduct(cartVO.getProductId()).getPrice().multiply(new BigDecimal(cartVO.getQuantity())));
 
         }
+
+        for (Integer cartId : cartIds) {
+            CartVO cartVO = cartService.getCartItem(cartId);
+            productService.frozenProduct(cartVO.getProductId(), cartVO.getQuantity());
+        }
         orderVO.setTotalAmount(totalAmount);
-        orderRepository.save(orderVO.toPO());
+        Order orderPO = orderVO.toPO();
+        orderRepository.save(orderPO);
         for (Integer cartId : cartIds) {
             CartOrdersRelation cartOrdersRelation = new CartOrdersRelation();
             cartOrdersRelation.setCartItemId(cartId);
-            cartOrdersRelation.setOrderId(orderVO.getId());
+            cartOrdersRelation.setOrderId(orderPO.toVO().getOrderId());
             cartOrderRelationRepository.save(cartOrdersRelation);
         }
 
-        return orderVO;
+        return orderPO.toVO();
     }
 
     @Override
@@ -124,7 +132,7 @@ public class OrderServiceImpl implements OrderService {
         request.setNotifyUrl(notifyUrl);
 
         JSONObject bizContent = new JSONObject();
-        bizContent.put("out_trade_no", order.getId());  // 我们自己生成的订单编号
+        bizContent.put("out_trade_no", order.getOrderId());  // 我们自己生成的订单编号
         bizContent.put("total_amount", order.getTotalAmount()); // 订单的总金额
 
         bizContent.put("product_code", "FAST_INSTANT_TRADE_PAY");  // 固定配置
@@ -137,7 +145,6 @@ public class OrderServiceImpl implements OrderService {
             e.printStackTrace();
         }
         payVO.setPaymentForm(form);
-
 
         return payVO;
     }
