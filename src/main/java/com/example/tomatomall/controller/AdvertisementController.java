@@ -20,6 +20,11 @@ public class AdvertisementController {
         return Response.buildSuccess(advertisementService.getAllAdvertisements());
     }
 
+    @GetMapping("/{id}")
+    public Response<AdvertisementVO> getAdvertisement(@PathVariable Integer id) {
+        return Response.buildSuccess(advertisementService.getAdvertisementById(id));
+    }
+
     @PutMapping
     public Response<String> updateAdvertisement(@RequestBody AdvertisementVO advertisementVO) {
         if(advertisementService.updateAdvertisement(advertisementVO)){
