@@ -43,6 +43,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Boolean deleteCategory(Integer categoryId) {
         if(categoryRepository.findById(categoryId).isPresent()){
+
+            List<CategoryProductRelation> categoryProductRelations = categoryProductRelationRepository.findByCategoryId(categoryId);
+            for (CategoryProductRelation categoryProductRelation:categoryProductRelations){
+                categoryProductRelationRepository.deleteById(categoryProductRelation.getId());
+            }
             categoryRepository.deleteById(categoryId);
             return true;
         }
