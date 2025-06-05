@@ -84,4 +84,9 @@ public class ProductController {
         }
         return Response.buildFailure("商品不存在", "400");
     }
+
+    @GetMapping("/search")
+    public Response<List<ProductVO>> searchProducts(@RequestParam("keyword") String keyword) {
+        return Response.buildSuccess(productService.search(keyword));
+    }
 }

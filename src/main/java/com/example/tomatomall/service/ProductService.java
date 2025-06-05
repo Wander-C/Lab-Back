@@ -27,5 +27,7 @@ public interface ProductService {
     void unfrozenProduct(Integer id, Integer number);
     // 卖出指定商品的库存
     void sellProduct(Integer id, Integer number);
+
+    List<ProductVO> search(String keyword);
 }
 

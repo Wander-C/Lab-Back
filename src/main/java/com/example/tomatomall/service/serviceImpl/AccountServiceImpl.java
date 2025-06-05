@@ -63,6 +63,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountVO getAccountInfo(String username) {
+
         Account account = accountRepository.findByUsername(username);
         if(account==null){
             throw TomatoMallException.usernameNotExist();
