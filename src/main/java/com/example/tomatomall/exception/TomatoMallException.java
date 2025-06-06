@@ -25,4 +25,10 @@ public class TomatoMallException extends RuntimeException {
     public static TomatoMallException orderNotExists() { return new TomatoMallException("订单不存在");}
     public static TomatoMallException promotionNameExists() { return new TomatoMallException("促销活动已存在");}
     public static TomatoMallException promotionNotExists() { return new TomatoMallException("促销活动不存在");}
+
+    public static TomatoMallException categoryAlreadyExists() {return new TomatoMallException("该分类已存在");}
+
+    public static TomatoMallException categoryNotExists() {return new TomatoMallException("该分类不存在");}
+
+    public static TomatoMallException categoryProductRelationAlreadyExists() {return new TomatoMallException("该商品已存在此分类中");}
 }

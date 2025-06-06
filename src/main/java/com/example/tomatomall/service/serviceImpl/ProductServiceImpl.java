@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -258,6 +259,16 @@ public class ProductServiceImpl implements ProductService {
             throw TomatoMallException.stockNotEnough();
         }
         stockpile.setFrozen(stockpile.getFrozen() - number);
+    }
+
+    @Override
+    public List<ProductVO> search(String keyword) {
+        if (keyword != null && !keyword.isEmpty()) {
+            return productRepository.search(keyword).stream()
+                   .map(Product::toVO)
+                   .collect(Collectors.toList());
+        }
+        return getAllProducts();
     }
 
 
