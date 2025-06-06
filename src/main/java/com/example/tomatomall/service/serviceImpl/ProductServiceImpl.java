@@ -127,7 +127,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductVO create(ProductVO productVO){
         if (productRepository.findByName(productVO.getTitle()) != null) {
-            throw TomatoMallException.nameAlreadyExists();
+            throw TomatoMallException.productNameAlreadyExists();
         }
         
         // 保存商品基本信息

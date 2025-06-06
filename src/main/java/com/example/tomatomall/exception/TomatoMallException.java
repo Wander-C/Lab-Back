@@ -19,8 +19,10 @@ public class TomatoMallException extends RuntimeException {
     public static TomatoMallException fileUploadFail() { return new TomatoMallException("文件上传失败");}
     public static TomatoMallException storeNotExists() { return new TomatoMallException("商店不存在");}
     public static TomatoMallException productNotExists() { return new TomatoMallException("商品不存在");}
-    public static TomatoMallException nameAlreadyExists() { return new TomatoMallException("商品名称已存在");}
+    public static TomatoMallException productNameAlreadyExists() { return new TomatoMallException("商品名称已存在");}
     public static TomatoMallException stockNotEnough() { return new TomatoMallException("商品库存不足");}
     public static TomatoMallException cartItemNotExists() { return new TomatoMallException("购物车商品不存在");}
     public static TomatoMallException orderNotExists() { return new TomatoMallException("订单不存在");}
+    public static TomatoMallException promotionNameExists() { return new TomatoMallException("促销活动已存在");}
+    public static TomatoMallException promotionNotExists() { return new TomatoMallException("促销活动不存在");}
 }
