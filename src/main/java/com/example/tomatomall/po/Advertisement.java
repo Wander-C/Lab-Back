@@ -23,9 +23,6 @@ public class Advertisement {
     private String content;
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id",nullable = false)//, insertable = false, updatable = false)
-    private Product product;
 
     public AdvertisementVO toVO(){
         AdvertisementVO advertisementVO = new AdvertisementVO();
@@ -33,7 +30,6 @@ public class Advertisement {
         advertisementVO.setTitle(this.title);
         advertisementVO.setContent(this.content);
         advertisementVO.setImgUrl(this.imageUrl);
-        advertisementVO.setProductId(this.product.getId());
         return advertisementVO;
     }
 

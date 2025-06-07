@@ -1,8 +1,10 @@
 package com.example.tomatomall.service.serviceImpl;
 
 import com.example.tomatomall.exception.TomatoMallException;
+import com.example.tomatomall.po.AdProductRelation;
 import com.example.tomatomall.po.Advertisement;
 import com.example.tomatomall.po.Product;
+import com.example.tomatomall.repository.AdProductRelationRepository;
 import com.example.tomatomall.repository.AdvertisementRepository;
 import com.example.tomatomall.service.AdvertisementService;
 import com.example.tomatomall.service.ProductService;
@@ -21,6 +23,9 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     private AdvertisementRepository advertisementRepository;
 
     @Autowired
+    private AdProductRelationRepository adProductRelationRepository;
+
+    @Autowired
     private ProductService productService;
 
     @Override
@@ -36,21 +41,34 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
     @Override
     public AdvertisementVO createAdvertisement(AdvertisementVO advertisementVO) {
-        System.out.println(advertisementVO.getProductId());
-        Product product = productService.getProduct(advertisementVO.getProductId()).toPO();
         Advertisement advertisement = advertisementVO.toPO(productService);
-        advertisement.setProduct(product);
         advertisementRepository.save(advertisement);
+
+        if (advertisementVO.getProductIds() != null) {
+            for (Integer productId : advertisementVO.getProductIds()) {
+                AdProductRelation adProductRelation = new AdProductRelation();
+                adProductRelation.setAdvertisementId(advertisement.getId());
+                adProductRelation.setProductId(productId);
+                adProductRelationRepository.save(adProductRelation);
+            }
+        }
         return advertisement.toVO();
     }
 
     @Override
     public Boolean updateAdvertisement(AdvertisementVO advertisementVO) {
         Advertisement advertisement = advertisementRepository.findById(advertisementVO.getId()).orElse(null);
-        Product product = productService.getProduct(advertisementVO.getProductId()).toPO();
         if (advertisement != null) {
             advertisement = advertisementVO.toPO(productService);
             advertisementRepository.save(advertisement);
+
+            adProductRelationRepository.deleteAll(adProductRelationRepository.findByAdvertisementId(advertisementVO.getId()));
+            for (Integer productId : advertisementVO.getProductIds()) {
+                AdProductRelation adProductRelation = new AdProductRelation();
+                adProductRelation.setAdvertisementId(advertisementVO.getId());
+                adProductRelation.setProductId(productId);
+                adProductRelationRepository.save(adProductRelation);
+            }
         }else{
             throw TomatoMallException.productNotExists();
         }

@@ -21,7 +21,7 @@ public class AdvertisementVO {
     private String title;
     private String content;
     private String imgUrl;
-    private Integer productId;
+    private Integer[] productIds;
 
     public Advertisement toPO(ProductService productService){
         Advertisement advertisement = new Advertisement();
@@ -29,7 +29,6 @@ public class AdvertisementVO {
         advertisement.setTitle(this.title);
         advertisement.setContent(this.content);
         advertisement.setImageUrl(this.imgUrl);
-        advertisement.setProduct(productService.getProduct(this.productId).toPO());
         return advertisement;
     }
 }
