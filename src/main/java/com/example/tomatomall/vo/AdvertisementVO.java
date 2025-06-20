@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -21,7 +23,8 @@ public class AdvertisementVO {
     private String title;
     private String content;
     private String imgUrl;
-    private Integer[] productIds;
+    private List<Integer> productIds;
+    private List<ProductVO> productVOs;
 
     public Advertisement toPO(ProductService productService){
         Advertisement advertisement = new Advertisement();

@@ -1,5 +1,6 @@
 package com.example.tomatomall.service.serviceImpl;
 
+import com.example.tomatomall.controller.ProductController;
 import com.example.tomatomall.exception.TomatoMallException;
 import com.example.tomatomall.po.AdProductRelation;
 import com.example.tomatomall.po.Advertisement;
@@ -9,6 +10,7 @@ import com.example.tomatomall.repository.AdvertisementRepository;
 import com.example.tomatomall.service.AdvertisementService;
 import com.example.tomatomall.service.ProductService;
 import com.example.tomatomall.vo.AdvertisementVO;
+import com.example.tomatomall.vo.ProductVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +38,22 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
     @Override
     public AdvertisementVO getAdvertisementById(Integer id) {
-        return advertisementRepository.findById(id).map(Advertisement::toVO).orElse(null);
+        Advertisement advertisement = advertisementRepository.findById(id).orElse(null);
+        if (advertisement == null) {
+            throw TomatoMallException.advertisementNotExists();
+        }
+
+        AdvertisementVO advertisementVO = advertisement.toVO();
+
+        List<AdProductRelation> adProductRelations = adProductRelationRepository.findByAdvertisementId(id);
+
+        List<ProductVO> productVOs = adProductRelations.stream()
+                .map(adProductRelation -> {
+            ProductVO productVO = productService.getProduct(adProductRelation.getProductId());
+            return productVO;
+        }).collect(Collectors.toList());
+        advertisementVO.setProductVOs(productVOs);
+        return advertisementVO;
     }
 
     @Override
@@ -79,10 +96,14 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     @Override
     public Boolean deleteAdvertisement(Integer id) {
         Advertisement advertisement = advertisementRepository.findById(id).orElse(null);
-        if (advertisement!= null) {
-            advertisementRepository.delete(advertisement);
-            return true;
+        if (advertisement == null) {
+            throw TomatoMallException.advertisementNotExists();
         }
+
+        List<AdProductRelation> adProductRelations = adProductRelationRepository.findByAdvertisementId(id);
+        adProductRelationRepository.deleteAll(adProductRelations);
+
+        advertisementRepository.deleteById(id);
         return true;
     }
 }
