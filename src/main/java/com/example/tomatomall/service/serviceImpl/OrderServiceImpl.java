@@ -59,6 +59,8 @@ public class OrderServiceImpl implements OrderService {
     private String serverUrl;
     @Value("${alipay.notifyUrl}")
     private String notifyUrl;
+    @Value("${alipay.returnUrl}")
+    private String returnUrl;
 
 
 
@@ -130,11 +132,12 @@ public class OrderServiceImpl implements OrderService {
         // 2. 创建 Request并设置Request参数
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();  // 发送请求的 Request类
         request.setNotifyUrl(notifyUrl);
+        request.setReturnUrl(returnUrl);
 
         JSONObject bizContent = new JSONObject();
         bizContent.put("out_trade_no", order.getOrderId());  // 我们自己生成的订单编号
         bizContent.put("total_amount", order.getTotalAmount()); // 订单的总金额
-
+        bizContent.put("subject", "订单支付：" + order.getOrderId());
         bizContent.put("product_code", "FAST_INSTANT_TRADE_PAY");  // 固定配置
         request.setBizContent(bizContent.toString());
         // 执行请求，拿到响应的结果，返回给浏览器
