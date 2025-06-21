@@ -32,8 +32,8 @@ public class CouponController {
      * 领取优惠券
      */
     @PostMapping("/{couponId}/claim")
-    public Response<String> claimCoupon(@PathVariable Integer couponId, @RequestParam Integer userId) {
-        if (couponService.claimCoupon(couponId, userId)) {
+    public Response<String> claimCoupon(@PathVariable Integer couponId) {
+        if (couponService.claimCoupon(couponId)) {
             return Response.buildSuccess("优惠券领取成功");
         }
         return Response.buildFailure("优惠券领取失败", "500");
@@ -42,9 +42,9 @@ public class CouponController {
     /**
      * 查看某个用户所有优惠券
      */
-    @GetMapping("/user/{userId}")
-    public Response<List<CouponVO>> getUserCoupons(@PathVariable Integer userId) {
-        List<CouponVO> coupons = couponService.getUserCoupons(userId);
+    @GetMapping("/user")
+    public Response<List<CouponVO>> getUserCoupons() {
+        List<CouponVO> coupons = couponService.getUserCoupons();
         if (coupons != null) {
             return Response.buildSuccess(coupons);
         }

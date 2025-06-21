@@ -3,10 +3,14 @@ package com.example.tomatomall.service.serviceImpl;
 import com.example.tomatomall.enums.CouponStatus;
 import com.example.tomatomall.po.Account;
 import com.example.tomatomall.po.Coupon;
+import com.example.tomatomall.po.CouponAccountRelation;
 import com.example.tomatomall.repository.AccountRepository;
+import com.example.tomatomall.repository.CouponAccountRelationRepository;
 import com.example.tomatomall.repository.CouponRepository;
 import com.example.tomatomall.service.CouponService;
+import com.example.tomatomall.util.SecurityUtil;
 import com.example.tomatomall.vo.CouponVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,6 +29,12 @@ public class CouponServiceImpl implements CouponService {
     @Resource
     private AccountRepository accountRepository;
 
+    @Autowired
+    private CouponAccountRelationRepository couponAccountRelationRepository;
+
+    @Autowired
+    private SecurityUtil securityUtil;
+
     @Override
     public boolean issueCoupon(CouponVO couponVO) {
         try {
@@ -36,7 +46,6 @@ public class CouponServiceImpl implements CouponService {
             coupon.setEndTime(couponVO.getEndTime());
             coupon.setMinAmount(couponVO.getMinAmount());
             // 发放时不设置用户，等待用户领取
-            coupon.setAccount(null);
             
             couponRepository.save(coupon);
             return true;
@@ -46,7 +55,8 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public boolean claimCoupon(Integer couponId, Integer userId) {
+    public boolean claimCoupon(Integer couponId) {
+        Integer userId = securityUtil.getCurrentAccount().getId();
         try {
             Optional<Coupon> couponOpt = couponRepository.findById(couponId);
             if (!couponOpt.isPresent()) {
@@ -56,7 +66,7 @@ public class CouponServiceImpl implements CouponService {
             Coupon coupon = couponOpt.get();
             
             // 检查优惠券是否可领取
-            if (coupon.getAccount() != null || coupon.getQuantity() <= 0 || 
+            if (coupon.getQuantity() <= 0 ||
                 coupon.getStatus() != CouponStatus.AVAILABLE) {
                 return false;
             }
@@ -76,10 +86,14 @@ public class CouponServiceImpl implements CouponService {
             }
             
             // 领取优惠券
-            coupon.setAccount(accountOpt.get());
             coupon.setQuantity(coupon.getQuantity() - 1);
-            
             couponRepository.save(coupon);
+
+            CouponAccountRelation couponAccountRelation = new CouponAccountRelation();
+            couponAccountRelation.setCouponId(coupon.getId());
+            couponAccountRelation.setAccountId(userId);
+            couponAccountRelationRepository.save(couponAccountRelation);
+
             return true;
         } catch (Exception e) {
             return false;
@@ -87,15 +101,22 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public List<CouponVO> getUserCoupons(Integer userId) {
+    public List<CouponVO> getUserCoupons() {
+        Integer userId = securityUtil.getCurrentAccount().getId();
         Optional<Account> accountOpt = accountRepository.findById(userId);
         if (!accountOpt.isPresent()) {
             return null;
         }
         
         Account account = accountOpt.get();
-        List<Coupon> coupons = couponRepository.findByAccount(account);
-        
+        List<CouponAccountRelation> couponAccountRelations = couponAccountRelationRepository.findByAccountId(userId);
+        List<Coupon> coupons = couponAccountRelations.stream()
+                .map(CouponAccountRelation::getCouponId)
+                .map(couponRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+
         // 更新过期状态
         Timestamp now = new Timestamp(System.currentTimeMillis());
         for (Coupon coupon : coupons) {

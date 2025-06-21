@@ -15,12 +15,12 @@ public interface CouponService {
     /**
      * 领取优惠券
      */
-    boolean claimCoupon(Integer couponId, Integer userId);
+    boolean claimCoupon(Integer couponId);
     
     /**
      * 查看某个用户所有优惠券
      */
-    List<CouponVO> getUserCoupons(Integer userId);
+    List<CouponVO> getUserCoupons();
     
     /**
      * 使用优惠券

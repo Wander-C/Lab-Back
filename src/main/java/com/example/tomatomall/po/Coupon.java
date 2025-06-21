@@ -20,6 +20,9 @@ public class Coupon {
     @Column(name = "id")
     private Integer id;
 
+    @Column(name = "promotion_id")
+    private Integer promotionId;
+
     @Column(name = "amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
@@ -28,10 +31,6 @@ public class Coupon {
 
     @Column(name = "status", nullable = false)
     private CouponStatus status;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private Account account;
 
     @Column(name = "start_time", nullable = false)
     private Timestamp startTime;
@@ -48,9 +47,6 @@ public class Coupon {
         couponVO.setAmount(this.amount);
         couponVO.setQuantity(this.quantity);
         couponVO.setStatus(this.status);
-        if (this.account != null) {
-            couponVO.setAccountId(this.account.getId());
-        }
         couponVO.setStartTime(this.startTime);
         couponVO.setEndTime(this.endTime);
         couponVO.setMinAmount(this.minAmount);
