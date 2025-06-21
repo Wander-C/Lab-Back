@@ -31,4 +31,6 @@ public class TomatoMallException extends RuntimeException {
     public static TomatoMallException categoryNotExists() {return new TomatoMallException("该分类不存在");}
 
     public static TomatoMallException categoryProductRelationAlreadyExists() {return new TomatoMallException("该商品已存在此分类中");}
+
+    public static TomatoMallException advertisementNotExists() {return new TomatoMallException("广告不存在");}
 }
