@@ -16,6 +16,7 @@ public class ProductVO {
     private Integer id;
     private String title;
     private BigDecimal price;
+    private BigDecimal discountPrice;
     private Double rate;
     private String description;
     private String cover;
@@ -28,6 +29,7 @@ public class ProductVO {
         product.setId(this.id);
         product.setTitle(this.title);
         product.setPrice(this.price);
+        product.setDiscountPrice(this.discountPrice);
         product.setRate(this.rate);
         product.setDescription(this.description);
         product.setCover(this.cover);

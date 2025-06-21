@@ -24,6 +24,9 @@ public class Product {
     @Column(name = "price", precision = 10, scale = 2, nullable = false)
     private BigDecimal price;
 
+    @Column(name = "discount_price")
+    private BigDecimal discountPrice;
+
     @Column(name = "rate")
     private Double rate;
 
@@ -41,6 +44,7 @@ public class Product {
         productVO.setId(this.id);
         productVO.setTitle(this.title);
         productVO.setPrice(this.price);
+        productVO.setDiscountPrice(this.discountPrice);
         productVO.setRate(this.rate);
         productVO.setDescription(this.description);
         productVO.setCover(this.cover);
